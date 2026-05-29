@@ -1,6 +1,7 @@
 package com.masha.libraryapi.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 //Book model is used as a blueprint for a real world object
 //This specific model is a blueprint for a book
@@ -23,8 +24,10 @@ public class Book{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Long id;
-
+    //Input validation
+    @NotBlank(message = "Title cannot be empty")
     private String title;
+    @NotBlank(message = "Author cannot be empty")
     private String author;
 
     public Book(){}

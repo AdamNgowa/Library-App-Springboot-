@@ -2,6 +2,9 @@ package com.masha.libraryapi.controller;
 
 import com.masha.libraryapi.model.Book;
 import com.masha.libraryapi.service.BookService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,16 +31,20 @@ public class BookController {
         this.service = service;
     }
 
-    //Means the code below handles POST Requests
-    @PostMapping
-    public Book addBook(@RequestParam String title,
-                        @RequestParam String author) {
-        return service.addBook(title, author);
-    }
+    //@POST Mapping means the code below handles POST Requests
+    //Instead of just returning data(Spring Boot -> Book JSON),
+    //You now return Spring Boot → Book JSON + HTTP 201 CREATED
+    //This is REST best practice
 
+    @PostMapping
+    //@Valid allows for You get automatic error response.
+    //In case of empty values
+    public ResponseEntity<Book> addBook(@Valid @RequestBody Book book){
+        Book savedBook = service.addBook(book);
+        return new ResponseEntity<>(savedBook,HttpStatus.CREATED);
+    }
     //Means the code below handles GET Requests
-//    Spring automatically:
-//
+    //    Spring automatically:
 //    receives HTTP request
 //    converts data to Java objects
 //    converts Java objects to JSON

@@ -1,5 +1,6 @@
 package com.masha.libraryapi.service;
 
+import com.masha.libraryapi.exception.BookNotFoundException;
 import com.masha.libraryapi.model.Book;
 import com.masha.libraryapi.repository.Bookrepository;
 import org.springframework.stereotype.Service;
@@ -18,13 +19,18 @@ public class BookService {
         this.repository = repository;
     }
 
-    public Book addBook(String title,String author ) {
+    public Book getBookById(Long id){
+        return repository.findById(id).orElseThrow(()->new BookNotFoundException("Book with id"+id+"not found"));
+    }
+
+    public Book addBook(Book book ) {
         //Save file in repository with JpaRepository save() method
         //Instead of manual adding into arrayList
-        Book book  = new Book(title,author);
-        return repository.save(book);
+       return repository.save(book);
 
     }
+
+
 
     public List<Book> getAllBooks(){
         //findAll method by JPA Repository
